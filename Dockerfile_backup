@@ -1,0 +1,17 @@
+FROM python:3.9
+
+WORKDIR /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install -U pip
+RUN pip install -U -q fastapi uvicorn
+RUN pip install pandas matplotlib
+RUN pip install yfinance pystan prophet joblib
+RUN pip install plotly
+
+COPY ./main.py /code/
+COPY ./model.py /code/
+
+CMD ["uvicorn", "main:app", "--reload", "--workers", "1", "--host", "0.0.0.0", "--port", "80"]
+

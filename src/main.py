@@ -1,8 +1,12 @@
 from fastapi import FastAPI, Query, HTTPException
 from pydantic import BaseModel
-from model import predict, convert
+from model import train, predict, convert
 
 app = FastAPI()
+
+@app.get("/ping")
+def pong():
+    return {"ping":"pong"}
 
 # pydantic models
 class StockIn(BaseModel):
@@ -17,6 +21,7 @@ def get_prediction(payload: StockIn):
     ticker = payload.ticker
     days = payload.days
 
+    train(ticker)
     prediction_list = predict(ticker, days)
 
     if not prediction_list:
